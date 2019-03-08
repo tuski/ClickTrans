@@ -8,5 +8,26 @@
     <artifactId>ClickTrans</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+<dependencies>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.0-alpha4</version>
+    </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/org.json/json -->
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20180130</version>
+    </dependency>
+
+
+</dependencies>
+
+
     
 </project>
