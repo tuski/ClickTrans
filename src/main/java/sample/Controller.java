@@ -1,10 +1,14 @@
 package sample;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -29,8 +33,18 @@ public class Controller extends MouseAdapter {
     @FXML
     private ImageView imgView;
 
+    @FXML private AnchorPane ap;
+
     @FXML
     public void captureImage(){
+
+        //https://stackoverflow.com/questions/41287372/how-to-take-snapshot-of-selected-area-of-screen-in-javafx
+        Stage stage = new Stage();
+        stage.setFullScreen(true);
+
+
+
+
        // Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
         MouseListener ml;
         ml = new MouseAdapter() {
@@ -41,9 +55,15 @@ public class Controller extends MouseAdapter {
             }
         };
 
-        
-
-        Rectangle screen = new Rectangle(start, new Dimension(end.x - start.x, end.y - start.y));
+//        Stage stage = (Stage) ap.getScene().getWindow();
+//        stage.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, new EventHandler<javafx.scene.input.MouseEvent>() {
+//            public void handle(javafx.scene.input.MouseEvent e) {
+//                start.setLocation(e.getX(),e.getY());
+//                System.out.println("pressed at= "+e.getX());
+//            }
+//        });
+//
+//        Rectangle screen = new Rectangle(start, new Dimension(end.x - start.x, end.y - start.y));
 
 
 
