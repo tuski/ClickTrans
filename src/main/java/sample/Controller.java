@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
@@ -35,14 +37,20 @@ public class Controller extends MouseAdapter {
 
     @FXML private AnchorPane ap;
 
+
+    BorderPane borderPane = new BorderPane();
+
+    /** The canvas. */
+    Canvas canvas = new Canvas();
+
+
     @FXML
     public void captureImage(){
 
         //https://stackoverflow.com/questions/41287372/how-to-take-snapshot-of-selected-area-of-screen-in-javafx
-        Stage stage = new Stage();
-        stage.setFullScreen(true);
-
-
+        Stage stage = Main.pStage;
+        CaptureWindow window = new CaptureWindow(Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight(), stage);
+        window.show();
 
 
        // Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());

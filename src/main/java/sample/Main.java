@@ -8,11 +8,12 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     double starting_point_x, starting_point_y ;
-
+public static Stage pStage;
     Group group_for_rectangles = new Group() ;
     Rectangle new_rectangle = null ;
 
@@ -27,7 +28,10 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
+        pStage=primaryStage;
 
+
+        primaryStage.show();
 
 //        Scene scene = new Scene( group_for_rectangles, 800, 600 ) ;
 //
