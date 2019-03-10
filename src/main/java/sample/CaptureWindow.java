@@ -14,12 +14,24 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import translate.MultipartUtility;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * Is used to capture an area of the screen.
@@ -143,17 +155,30 @@ public class CaptureWindow extends Stage {
             BufferedImage screenCapture = new Robot().createScreenCapture(screen);
             WritableImage myImage = SwingFXUtils.toFXImage(screenCapture, null);
 
-            ImageIO.write(screenCapture,"jpg", new File("out.jpg"));
+            File imageFile = new File("d:\\out.jpg");
 
+            sendPost(false,imageFile,"jpn");
+
+            ImageIO.write(screenCapture,"jpg", imageFile);
+//            ITesseract instance = new Tesseract();  // JNA Interface Mapping
+//            // ITesseract instance = new Tesseract1(); // JNA Direct Mapping
+//            instance.setDatapath("tessdata"); // path to tessdata directory
+//
+//            try {
+//                String result = instance.doOCR(imageFile);
+//                System.out.println(result);
+//            } catch (TesseractException e) {
+//                System.err.println(e.getMessage());
+//            }
 
 
         } catch (AWTException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-
 
 
             } else if (key.getCode() == KeyCode.ESCAPE)
@@ -257,5 +282,75 @@ public class CaptureWindow extends Stage {
 
         return new int[]{xPressed, yPressed, xNow, yNow};
     }
+
+
+
+    private static String sendPost(boolean isOverlayRequired, File imageUrl, String language) throws Exception {
+        String url = "https://api.ocr.space/parse/image"; // OCR API Endpoints
+        StringBuffer responseString = new StringBuffer();
+        try {
+            MultipartUtility multipart = new MultipartUtility(url, "UTF-8");
+
+            multipart.addFormField("isOverlayRequired", Boolean.toString(isOverlayRequired));
+            multipart.addFormField("isCreateSearchablePdf","false");
+            multipart.addFormField("language",language);
+            multipart.addFilePart("file", imageUrl);
+            List<String> response = multipart.finish();
+
+            JSONObject obj = new JSONObject(response.get(0));
+            JSONArray jsonArray = obj.getJSONArray("ParsedResults");
+            JSONObject childJSONObject = jsonArray.getJSONObject(0);
+            System.out.println("value = "+childJSONObject.getString("ParsedText")+"trans= "+callUrlAndParseResult("ja","en",childJSONObject.getString("ParsedText")));
+            for (String line : response) {
+                responseString.append(line);
+            }
+        } catch (IOException ex) {
+            // Log.v("OCR Exception",ex.getMessage());
+        }
+        //return result
+        return String.valueOf(responseString);
+    }
+
+
+    private static String callUrlAndParseResult(String langFrom, String langTo,
+                                                String word) throws Exception {
+
+        String url = "https://translate.googleapis.com/translate_a/single?" +
+                "client=gtx&" +
+                "sl=" + langFrom +
+                "&tl=" + langTo +
+                "&dt=t&q=" + URLEncoder.encode(word, "UTF-8");
+
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        return parseResult(response.toString());
+    }
+
+    private static String parseResult(String inputJson) throws Exception {
+        /*
+         * inputJson for word 'hello' translated to language Hindi from English-
+         * [[["नमस्ते","hello",,,1]],,"en"]
+         * We have to get 'नमस्ते ' from this json.
+         */
+
+        JSONArray jsonArray = new JSONArray(inputJson);
+        JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
+        JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
+
+        return jsonArray3.get(0).toString();
+    }
+
 
 }
