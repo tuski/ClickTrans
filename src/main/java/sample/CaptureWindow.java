@@ -1,16 +1,25 @@
 package sample;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Is used to capture an area of the screen.
@@ -124,6 +133,29 @@ public class CaptureWindow extends Stage {
             if (key.getCode() == KeyCode.B) {
                 close();
                 System.out.println("Key Released....");
+
+
+                ////////////
+                int[] ints = calculatedRectangle();
+                Rectangle screen= new Rectangle(ints[0],ints[1],ints[2],ints[3]);
+
+        try {
+            BufferedImage screenCapture = new Robot().createScreenCapture(screen);
+            WritableImage myImage = SwingFXUtils.toFXImage(screenCapture, null);
+
+            ImageIO.write(screenCapture,"jpg", new File("out.jpg"));
+
+
+
+        } catch (AWTException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
             } else if (key.getCode() == KeyCode.ESCAPE)
                 close();
         });

@@ -51,17 +51,43 @@ public class Controller extends MouseAdapter {
         Stage stage = Main.pStage;
         CaptureWindow window = new CaptureWindow(Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight(), stage);
         window.show();
+        int[] ints = window.calculatedRectangle();
+
+        // Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+
+//        Rectangle screen= new Rectangle(ints[0],ints[1],ints[2],ints[3]);
+//
+//        try {
+//            BufferedImage screenCapture = new Robot().createScreenCapture(screen);
+//            WritableImage myImage = SwingFXUtils.toFXImage(screenCapture, null);
+//            imgView.setImage(myImage);
+//            ImageIO.write(screenCapture,"jpg", new File("out.jpg"));
+//
+//
+//
+//            Image cursor = ImageIO.read(new File("c:/cursor.gif"));
+//            int x = MouseInfo.getPointerInfo().getLocation().x;
+//            int y = MouseInfo.getPointerInfo().getLocation().y;
+//
+//            Graphics2D graphics2D = screenCapture.createGraphics();
+//            graphics2D.drawImage(cursor, x, y, 16, 16, null); // cursor.gif is 16x16 size.
+//            ImageIO.write(screenCapture, "GIF", new File("c:/capture.gif"));
+//
+//        } catch (AWTException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
-       // Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-        MouseListener ml;
-        ml = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                start.setLocation(e.getX(),e.getY());
-                System.out.println("pressed at= "+e.getX());
-            }
-        };
+//        MouseListener ml;
+//        ml = new MouseAdapter() {
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//                start.setLocation(e.getX(),e.getY());
+//                System.out.println("pressed at= "+e.getX());
+//            }
+//        };
 
 //        Stage stage = (Stage) ap.getScene().getWindow();
 //        stage.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, new EventHandler<javafx.scene.input.MouseEvent>() {
