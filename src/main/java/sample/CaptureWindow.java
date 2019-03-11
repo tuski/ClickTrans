@@ -12,11 +12,10 @@ import javafx.scene.paint.Color;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import translate.MultipartUtility;
@@ -45,7 +44,10 @@ public class CaptureWindow extends Stage {
      */
     // BorderPane and Canvas
     BorderPane borderPane = new BorderPane();
-
+    Text sourceText;
+    Text translatedText;
+   static String parsedText;
+   static String transText;
     /**
      * The canvas.
      */
@@ -104,13 +106,16 @@ public class CaptureWindow extends Stage {
 
     /**
      * Constructor.
-     *
-     * @param screenWidth  the screen width
+     *  @param screenWidth  the screen width
      * @param screenHeight the screen height
      * @param primary      the primary
+     * @param sourceText
+     * @param translatedText
      */
-    public CaptureWindow(double screenWidth, double screenHeight, Stage primary) {
+    public CaptureWindow(double screenWidth, double screenHeight, Stage primary, Text sourceText, Text translatedText) {
         stage = primary;
+        this.sourceText=sourceText;
+        this.translatedText=translatedText;
 
         setX(0);
         setY(0);
@@ -153,24 +158,11 @@ public class CaptureWindow extends Stage {
 
         try {
             BufferedImage screenCapture = new Robot().createScreenCapture(screen);
-            WritableImage myImage = SwingFXUtils.toFXImage(screenCapture, null);
 
-            File imageFile = new File("d:\\out.jpg");
+            File imageFile = new File("c:\\Users\\0568\\Pictures\\out.jpg");
+            ImageIO.write(screenCapture,"jpg", imageFile);
 
             sendPost(false,imageFile,"jpn");
-
-            ImageIO.write(screenCapture,"jpg", imageFile);
-//            ITesseract instance = new Tesseract();  // JNA Interface Mapping
-//            // ITesseract instance = new Tesseract1(); // JNA Direct Mapping
-//            instance.setDatapath("tessdata"); // path to tessdata directory
-//
-//            try {
-//                String result = instance.doOCR(imageFile);
-//                System.out.println(result);
-//            } catch (TesseractException e) {
-//                System.err.println(e.getMessage());
-//            }
-
 
         } catch (AWTException e) {
             e.printStackTrace();
@@ -285,7 +277,7 @@ public class CaptureWindow extends Stage {
 
 
 
-    private static String sendPost(boolean isOverlayRequired, File imageUrl, String language) throws Exception {
+    private String sendPost(boolean isOverlayRequired, File imageUrl, String language) throws Exception {
         String url = "https://api.ocr.space/parse/image"; // OCR API Endpoints
         StringBuffer responseString = new StringBuffer();
         try {
@@ -300,7 +292,12 @@ public class CaptureWindow extends Stage {
             JSONObject obj = new JSONObject(response.get(0));
             JSONArray jsonArray = obj.getJSONArray("ParsedResults");
             JSONObject childJSONObject = jsonArray.getJSONObject(0);
-            System.out.println("value = "+childJSONObject.getString("ParsedText")+"trans= "+callUrlAndParseResult("ja","en",childJSONObject.getString("ParsedText")));
+
+             parsedText = childJSONObject.getString("ParsedText");
+             transText = callUrlAndParseResult("ja","en",childJSONObject.getString("ParsedText"));
+            sourceText.setText(parsedText);
+            translatedText.setText(transText);
+            System.out.println("value = "+parsedText+"trans= "+transText);
             for (String line : response) {
                 responseString.append(line);
             }
