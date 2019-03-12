@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -27,7 +28,7 @@ public class HomePageController implements Initializable {
     private AnchorPane topbar;
 
     @FXML
-    private ImageView btnClick,btnTranslate, btnHistory, btnSettings;
+    private ImageView btnClick,btnTranslate, btnHistory, btnSettings, btnCloseShutter;
 
     @FXML
     private AnchorPane clickView,translateView, historyView, settingsView;
@@ -74,8 +75,9 @@ public class HomePageController implements Initializable {
         toLanguage.setValue("English");
         toLanguage.setItems(outputLangOptn);
 
-        closeShutter();
 
+
+        closeShutter();
     }
 
 
@@ -83,6 +85,8 @@ public class HomePageController implements Initializable {
     private void handleButtonAction(MouseEvent event){
         if (event.getTarget()== btnClick){
             captureImage(clickView);
+            Tooltip t = new Tooltip("Close Shutter");
+            Tooltip.install(btnCloseShutter,t);
         }
         if (event.getTarget()== btnTranslate){
             clickView.setVisible(false);

@@ -117,7 +117,7 @@
                   <Image url="@../images/copy.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="btnCopySourceText1" fitHeight="35.0" fitWidth="35.0" layoutX="523.0" layoutY="420.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnCloseShutter" accessibleText="Close Shutter" fitHeight="35.0" fitWidth="35.0" layoutX="523.0" layoutY="420.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/up.png" />
                </image>
