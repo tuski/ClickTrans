@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
@@ -48,6 +49,7 @@ public class CaptureWindow extends Stage {
     TextArea translatedText;
     String languageFrom;
     String languageTo;
+    AnchorPane clickView;
     /**
      * The canvas.
      */
@@ -106,20 +108,23 @@ public class CaptureWindow extends Stage {
 
     /**
      * Constructor.
-     *  @param screenWidth    the screen width
+     * @param screenWidth    the screen width
      * @param screenHeight   the screen height
      * @param primary        the primary
      * @param sourceText
      * @param translatedText
      * @param languageFrom
      * @param languageTo
+     * @param clickView
      */
-    public CaptureWindow(double screenWidth, double screenHeight, Stage primary, TextArea sourceText, TextArea translatedText, String languageFrom, String languageTo) {
+    public CaptureWindow(double screenWidth, double screenHeight, Stage primary, TextArea sourceText, TextArea translatedText, String languageFrom, String languageTo, AnchorPane clickView) {
         stage = primary;
         this.sourceText = sourceText;
         this.translatedText = translatedText;
         this.languageFrom=languageFrom;
         this.languageTo=languageTo;
+        this.clickView=clickView;
+
         setX(0);
         setY(0);
         setWidth(screenWidth);
@@ -153,6 +158,7 @@ public class CaptureWindow extends Stage {
                 close();
                 System.out.println("Key Released....");
                 ////////////
+                clickView.setVisible(true);
                 int[] ints = calculatedRectangle();
                 Rectangle screen = new Rectangle(ints[0], ints[1], ints[2], ints[3]);
                 try {
@@ -165,6 +171,7 @@ public class CaptureWindow extends Stage {
                     String transText = translator.callUrlAndParseResult("ja", "en", ocrText);
                     sourceText.setText(ocrText);
                     translatedText.setText(transText);
+
                     //sendPost(false, imageFile, "jpn");
 
                 } catch (AWTException e) {

@@ -13,6 +13,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import sample.CaptureWindow;
 import sample.Main;
+import translate.Translator;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,26 +42,19 @@ public class HomePageController implements Initializable {
     private AnchorPane settings;
 
     @FXML
-    private TextArea sourceText;
+    private TextArea sourceText,sourceTextTransView, translatedText, translatedTextTransView;
 
     @FXML
-    private TextArea translatedText;
-
-    @FXML
-    private ImageView btnCopySourceText;
-
-    @FXML
-    private ImageView btnCopyTranslatedText;
+    private ImageView btnCopySourceText,btnCopyTranslatedText;
 
 
 
-
-    public void captureImage(){
-            String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
+    public void captureImage(AnchorPane clickView){
+        String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
         String languageTo = toLanguage.getSelectionModel().getSelectedItem().toString();
         //https://stackoverflow.com/questions/41287372/how-to-take-snapshot-of-selected-area-of-screen-in-javafx
         Stage stage = Main.pStage;
-        CaptureWindow window = new CaptureWindow(Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight(), stage, sourceText, translatedText,languageFrom,languageTo);
+        CaptureWindow window = new CaptureWindow(Screen.getPrimary().getBounds().getWidth(),Screen.getPrimary().getBounds().getHeight(), stage, sourceText, translatedText,languageFrom,languageTo,clickView);
         window.show();
     }
 
@@ -74,10 +68,10 @@ public class HomePageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //Load initial language
         ObservableList<String> sourceLangOptn = FXCollections.observableArrayList("Japanese","English");
-        fromLanguage.setValue("Japanese"); // this statement shows default value
+        fromLanguage.setValue("Japanese");
         fromLanguage.setItems(sourceLangOptn);
         ObservableList<String> outputLangOptn = FXCollections.observableArrayList("Japanese","English");
-        toLanguage.setValue("English"); // this statement shows default value
+        toLanguage.setValue("English");
         toLanguage.setItems(outputLangOptn);
 
         closeShutter();
@@ -88,16 +82,25 @@ public class HomePageController implements Initializable {
     @FXML
     private void handleButtonAction(MouseEvent event){
         if (event.getTarget()== btnClick){
-            clickView.setVisible(true);
-            translateView.setVisible(false);
-            captureImage();
+            captureImage(clickView);
         }
         if (event.getTarget()== btnTranslate){
             clickView.setVisible(false);
             translateView.setVisible(true);
-
         }
     }
+
+
+    @FXML
+    private void translate(){
+        Translator translator=new Translator();
+        try {
+            translatedTextTransView.setText(translator.callUrlAndParseResult("ja", "en", sourceTextTransView.getText()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void closeShutter(){
