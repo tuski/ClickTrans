@@ -1,11 +1,10 @@
 package sample;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.WritableImage;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -19,6 +18,7 @@ import javafx.stage.StageStyle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import translate.MultipartUtility;
+import translate.Translator;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -44,10 +44,10 @@ public class CaptureWindow extends Stage {
      */
     // BorderPane and Canvas
     BorderPane borderPane = new BorderPane();
-    Text sourceText;
-    Text translatedText;
-   static String parsedText;
-   static String transText;
+    TextArea sourceText;
+    TextArea translatedText;
+    String languageFrom;
+    String languageTo;
     /**
      * The canvas.
      */
@@ -106,17 +106,20 @@ public class CaptureWindow extends Stage {
 
     /**
      * Constructor.
-     *  @param screenWidth  the screen width
-     * @param screenHeight the screen height
-     * @param primary      the primary
+     *  @param screenWidth    the screen width
+     * @param screenHeight   the screen height
+     * @param primary        the primary
      * @param sourceText
      * @param translatedText
+     * @param languageFrom
+     * @param languageTo
      */
-    public CaptureWindow(double screenWidth, double screenHeight, Stage primary, Text sourceText, Text translatedText) {
+    public CaptureWindow(double screenWidth, double screenHeight, Stage primary, TextArea sourceText, TextArea translatedText, String languageFrom, String languageTo) {
         stage = primary;
-        this.sourceText=sourceText;
-        this.translatedText=translatedText;
-
+        this.sourceText = sourceText;
+        this.translatedText = translatedText;
+        this.languageFrom=languageFrom;
+        this.languageTo=languageTo;
         setX(0);
         setY(0);
         setWidth(screenWidth);
@@ -142,7 +145,6 @@ public class CaptureWindow extends Stage {
         });
 
         borderPane.setCenter(canvas);
-
         // Scene
         setScene(new Scene(borderPane, Color.TRANSPARENT));
         getScene().setCursor(Cursor.CROSSHAIR);
@@ -150,27 +152,28 @@ public class CaptureWindow extends Stage {
             if (key.getCode() == KeyCode.B) {
                 close();
                 System.out.println("Key Released....");
-
-
                 ////////////
                 int[] ints = calculatedRectangle();
-                Rectangle screen= new Rectangle(ints[0],ints[1],ints[2],ints[3]);
+                Rectangle screen = new Rectangle(ints[0], ints[1], ints[2], ints[3]);
+                try {
+                    BufferedImage screenCapture = new Robot().createScreenCapture(screen);
 
-        try {
-            BufferedImage screenCapture = new Robot().createScreenCapture(screen);
+                    File imageFile = new File("c:\\Users\\0568\\Pictures\\out.jpg");
+                    ImageIO.write(screenCapture, "jpg", imageFile);
+                    Translator translator = new Translator();
+                    String ocrText = translator.sendPost(false, imageFile, "jpn");
+                    String transText = translator.callUrlAndParseResult("ja", "en", ocrText);
+                    sourceText.setText(ocrText);
+                    translatedText.setText(transText);
+                    //sendPost(false, imageFile, "jpn");
 
-            File imageFile = new File("c:\\Users\\0568\\Pictures\\out.jpg");
-            ImageIO.write(screenCapture,"jpg", imageFile);
-
-            sendPost(false,imageFile,"jpn");
-
-        } catch (AWTException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                } catch (AWTException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
             } else if (key.getCode() == KeyCode.ESCAPE)
@@ -274,80 +277,5 @@ public class CaptureWindow extends Stage {
 
         return new int[]{xPressed, yPressed, xNow, yNow};
     }
-
-
-
-    private String sendPost(boolean isOverlayRequired, File imageUrl, String language) throws Exception {
-        String url = "https://api.ocr.space/parse/image"; // OCR API Endpoints
-        StringBuffer responseString = new StringBuffer();
-        try {
-            MultipartUtility multipart = new MultipartUtility(url, "UTF-8");
-
-            multipart.addFormField("isOverlayRequired", Boolean.toString(isOverlayRequired));
-            multipart.addFormField("isCreateSearchablePdf","false");
-            multipart.addFormField("language",language);
-            multipart.addFilePart("file", imageUrl);
-            List<String> response = multipart.finish();
-
-            JSONObject obj = new JSONObject(response.get(0));
-            JSONArray jsonArray = obj.getJSONArray("ParsedResults");
-            JSONObject childJSONObject = jsonArray.getJSONObject(0);
-
-             parsedText = childJSONObject.getString("ParsedText");
-             transText = callUrlAndParseResult("ja","en",childJSONObject.getString("ParsedText"));
-            sourceText.setText(parsedText);
-            translatedText.setText(transText);
-            System.out.println("value = "+parsedText+"trans= "+transText);
-            for (String line : response) {
-                responseString.append(line);
-            }
-        } catch (IOException ex) {
-            // Log.v("OCR Exception",ex.getMessage());
-        }
-        //return result
-        return String.valueOf(responseString);
-    }
-
-
-    private static String callUrlAndParseResult(String langFrom, String langTo,
-                                                String word) throws Exception {
-
-        String url = "https://translate.googleapis.com/translate_a/single?" +
-                "client=gtx&" +
-                "sl=" + langFrom +
-                "&tl=" + langTo +
-                "&dt=t&q=" + URLEncoder.encode(word, "UTF-8");
-
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        return parseResult(response.toString());
-    }
-
-    private static String parseResult(String inputJson) throws Exception {
-        /*
-         * inputJson for word 'hello' translated to language Hindi from English-
-         * [[["नमस्ते","hello",,,1]],,"en"]
-         * We have to get 'नमस्ते ' from this json.
-         */
-
-        JSONArray jsonArray = new JSONArray(inputJson);
-        JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
-        JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
-
-        return jsonArray3.get(0).toString();
-    }
-
 
 }

@@ -5,8 +5,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -18,10 +19,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
-        primaryStage.setTitle("ClickTrans");
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/homePage.fxml"));
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
         root.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -36,9 +35,17 @@ public class Main extends Application {
                 primaryStage.setY(event.getScreenY() - yOffset);
             }
         });
+
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
         pStage=primaryStage;
-        primaryStage.setScene(new Scene(root, 551, 365));
+        primaryStage.setScene(scene);
         primaryStage.show();
+
+
+
+
+
     }
 
 
