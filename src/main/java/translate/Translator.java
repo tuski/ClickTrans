@@ -1,5 +1,7 @@
 package translate;
 
+import database.ConnectionProvider;
+import org.dizitart.no2.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +25,7 @@ public class Translator {
 
         twoDigitLang.put("Japanese","ja");
         twoDigitLang.put("English","en");
+
     }
 
 
@@ -34,7 +37,7 @@ public class Translator {
 
             multipart.addFormField("isOverlayRequired", Boolean.toString(isOverlayRequired));
             multipart.addFormField("isCreateSearchablePdf", "false");
-            multipart.addFormField("language", language);
+            multipart.addFormField("language", threeDigitLang.get(language));
             multipart.addFilePart("file", imageUrl);
             List<String> response = multipart.finish();
 
@@ -57,11 +60,11 @@ public class Translator {
 
 
     public String callUrlAndParseResult(String langFrom, String langTo, String word) throws Exception {
-
+        word.trim();
         String url = "https://translate.googleapis.com/translate_a/single?" +
                 "client=gtx&" +
-                "sl=" + langFrom +
-                "&tl=" + langTo +
+                "sl=" + twoDigitLang.get(langFrom) +
+                "&tl=" + twoDigitLang.get(langTo) +
                 "&dt=t&q=" + URLEncoder.encode(word, "UTF-8");
 
         URL obj = new URL(url);
@@ -77,8 +80,25 @@ public class Translator {
             response.append(inputLine);
         }
         in.close();
-        System.out.println(response.toString());
-        return parseResult(response.toString());
+
+        String result = parseResult(response.toString());
+        result.trim();
+        if (result.equals(" ")){
+            result= "Could not translate. Try changing the language";
+        }else {
+            Nitrite db= ConnectionProvider.getConnection();
+            NitriteCollection collection = db.getCollection("test");
+            Document doc = Document.createDocument("from",word).put("to",result);
+            collection.insert(doc);
+            Cursor cursor = collection.find(FindOptions.sort("id",SortOrder.Descending));
+            for (Document document : cursor) {
+                System.out.println(document.get("from"));
+                System.out.println(document.get("to"));
+            }
+
+        }
+
+        return result;
     }
 
     private static String parseResult(String inputJson) throws Exception {
@@ -90,9 +110,20 @@ public class Translator {
 
         JSONArray jsonArray = new JSONArray(inputJson);
         JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
-        JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
 
-        return jsonArray3.get(0).toString();
+        String result = "";
+        for (int i = 0; i < jsonArray2.length(); i++) {
+            JSONArray jsonArray3 = (JSONArray) jsonArray2.get(i);
+            result= result+" "+jsonArray3.get(0).toString();
+        }
+
+
+
+
+
+
+       // System.out.println("res="+result);
+        return result;
     }
 
 

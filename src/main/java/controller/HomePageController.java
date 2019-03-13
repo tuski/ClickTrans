@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,8 +16,11 @@ import javafx.stage.Stage;
 import sample.CaptureWindow;
 import sample.Main;
 import translate.Translator;
+import utility.PropertiesFile;
 
+import java.io.*;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 
@@ -67,18 +71,36 @@ public class HomePageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        PropertiesFile prop= new PropertiesFile();
+
+
         //Load initial language
         ObservableList<String> sourceLangOptn = FXCollections.observableArrayList("Japanese","English");
-        fromLanguage.setValue("Japanese");
+        fromLanguage.setValue(prop.getProperty("fromLanguage"));
         fromLanguage.setItems(sourceLangOptn);
         ObservableList<String> outputLangOptn = FXCollections.observableArrayList("Japanese","English");
-        toLanguage.setValue("English");
+        toLanguage.setValue(prop.getProperty("toLanguage"));
         toLanguage.setItems(outputLangOptn);
 
+        fromLanguage.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (observable, oldValue, newValue) -> {
+                    prop.setProperty("fromLanguage", newValue.toString());
+                    System.out.println(newValue);
+                });
+
+        toLanguage.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (observable, oldValue, newValue) -> {
+                    prop.setProperty("toLanguage", newValue.toString());
+                    System.out.println(newValue);
+                });
 
 
         closeShutter();
     }
+
+
 
 
     @FXML
@@ -98,8 +120,10 @@ public class HomePageController implements Initializable {
     @FXML
     private void translate(){
         Translator translator=new Translator();
+        String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
+        String languageTo = toLanguage.getSelectionModel().getSelectedItem().toString();
         try {
-            translatedTextTransView.setText(translator.callUrlAndParseResult("ja", "en", sourceTextTransView.getText()));
+            translatedTextTransView.setText(translator.callUrlAndParseResult(languageFrom, languageTo, sourceTextTransView.getText()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,6 +138,12 @@ public class HomePageController implements Initializable {
         settingsView.setVisible(false);
     }
 
-
+    @FXML
+    private void exchangeLanguage(){
+        String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
+        String languageTo = toLanguage.getSelectionModel().getSelectedItem().toString();
+        fromLanguage.setValue(languageTo);
+        toLanguage.setValue(languageFrom);
+    }
 
 }

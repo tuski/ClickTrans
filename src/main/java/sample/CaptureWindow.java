@@ -167,8 +167,8 @@ public class CaptureWindow extends Stage {
                     File imageFile = new File("c:\\Users\\0568\\Pictures\\out.jpg");
                     ImageIO.write(screenCapture, "jpg", imageFile);
                     Translator translator = new Translator();
-                    String ocrText = translator.sendPost(false, imageFile, "jpn");
-                    String transText = translator.callUrlAndParseResult("ja", "en", ocrText);
+                    String ocrText = translator.sendPost(false, imageFile,languageFrom); //3 digit language
+                    String transText = translator.callUrlAndParseResult(languageFrom, languageTo, ocrText); //2 digit language
                     sourceText.setText(ocrText);
                     translatedText.setText(transText);
 
