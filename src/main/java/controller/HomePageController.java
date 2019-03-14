@@ -133,6 +133,7 @@ public class HomePageController implements Initializable {
     private void handleButtonAction(MouseEvent event){
         if (event.getTarget()== btnClick){
             captureImage(clickView);
+            clickView.setVisible(false);
             translateView.setVisible(false);
             historyView.setVisible(false);
             settingsView.setVisible(false);
