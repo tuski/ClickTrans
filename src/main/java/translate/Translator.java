@@ -1,7 +1,9 @@
 package translate;
 
 import database.ConnectionProvider;
+import entity.TranslatedText;
 import org.dizitart.no2.*;
+import org.dizitart.no2.objects.ObjectRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -60,7 +62,7 @@ public class Translator {
 
 
     public String callUrlAndParseResult(String langFrom, String langTo, String word) throws Exception {
-        word.trim();
+        word= word.trim();
         String url = "https://translate.googleapis.com/translate_a/single?" +
                 "client=gtx&" +
                 "sl=" + twoDigitLang.get(langFrom) +
@@ -82,19 +84,24 @@ public class Translator {
         in.close();
 
         String result = parseResult(response.toString());
-        result.trim();
-        if (result.equals(" ")){
+      result=  result.trim();
+        if (result.equals(" ") || result.isEmpty()){
             result= "Could not translate. Try changing the language";
         }else {
             Nitrite db= ConnectionProvider.getConnection();
-            NitriteCollection collection = db.getCollection("test");
-            Document doc = Document.createDocument("from",word).put("to",result);
-            collection.insert(doc);
-            Cursor cursor = collection.find(FindOptions.sort("id",SortOrder.Descending));
-            for (Document document : cursor) {
-                System.out.println(document.get("from"));
-                System.out.println(document.get("to"));
-            }
+//            NitriteCollection collection = db.getCollection("test");
+//            Document doc = Document.createDocument("from",word).put("to",result);
+//            collection.insert(doc);
+            System.out.println("entered");
+
+            ObjectRepository<TranslatedText> repository = db.getRepository(TranslatedText.class);
+            repository.insert(new TranslatedText(word,result));
+
+//            Cursor cursor = collection.find(FindOptions.sort("id",SortOrder.Descending));
+//            for (Document document : cursor) {
+//                System.out.println(document.get("from"));
+//                System.out.println(document.get("to"));
+//            }
 
         }
 

@@ -16,7 +16,7 @@ public class ConnectionProvider {
                     .compressed()
                     .filePath("trans.dat")
                     .openOrCreate("tuski", "test12");
-            System.out.println("Successfully created");
+            System.out.println("Successfully Connected");
         }
 
         return db;

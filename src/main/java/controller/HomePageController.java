@@ -1,26 +1,30 @@
 package controller;
 
-import javafx.beans.value.ObservableValue;
+import database.ConnectionProvider;
+import entity.TranslatedText;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.dizitart.no2.*;
+import org.dizitart.no2.objects.Cursor;
+import org.dizitart.no2.objects.ObjectRepository;
 import sample.CaptureWindow;
 import sample.Main;
 import translate.Translator;
 import utility.PropertiesFile;
 
-import java.io.*;
 import java.net.URL;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -51,6 +55,17 @@ public class HomePageController implements Initializable {
 
     @FXML
     private ImageView btnCopySourceText,btnCopyTranslatedText;
+
+    @FXML
+    private TableView<TranslatedText> historyTable;
+
+    @FXML
+    private TableColumn<TranslatedText, String> fromText = new TableColumn<>("Source Text");
+
+    @FXML
+    private TableColumn<TranslatedText, String> toText = new TableColumn<>("Translated Text");
+
+
 
 
 
@@ -96,7 +111,18 @@ public class HomePageController implements Initializable {
                     System.out.println(newValue);
                 });
 
+        fromText.setCellValueFactory(new PropertyValueFactory<>("fromText"));
+        toText.setCellValueFactory(new PropertyValueFactory<>("toText"));
+        fromText.setCellFactory(TextFieldTableCell.forTableColumn());
+        toText.setCellFactory(TextFieldTableCell.forTableColumn());
+        fromText.prefWidthProperty().bind(historyTable.widthProperty().divide(2));
+        fromText.textProperty();
+        toText.prefWidthProperty().bind(historyTable.widthProperty().divide(2));
+        historyTable.getColumns().addAll(fromText, toText);
+        //fromText.setSortType(TableColumn.SortType.DESCENDING);
 
+        Tooltip t = new Tooltip("Close Shutter");
+        Tooltip.install(btnCloseShutter,t);
         closeShutter();
     }
 
@@ -107,13 +133,33 @@ public class HomePageController implements Initializable {
     private void handleButtonAction(MouseEvent event){
         if (event.getTarget()== btnClick){
             captureImage(clickView);
-            Tooltip t = new Tooltip("Close Shutter");
-            Tooltip.install(btnCloseShutter,t);
+            translateView.setVisible(false);
+            historyView.setVisible(false);
+            settingsView.setVisible(false);
         }
         if (event.getTarget()== btnTranslate){
             clickView.setVisible(false);
+            historyView.setVisible(false);
             translateView.setVisible(true);
+            settingsView.setVisible(false);
         }
+        if (event.getTarget()== btnHistory){
+            populateTable();
+            clickView.setVisible(false);
+            translateView.setVisible(false);
+            settingsView.setVisible(false);
+            historyView.setVisible(true);
+
+        }
+        if (event.getTarget()== btnSettings){
+            clickView.setVisible(false);
+            translateView.setVisible(false);
+            historyView.setVisible(false);
+            settingsView.setVisible(true);
+        }
+
+
+
     }
 
 
@@ -129,6 +175,42 @@ public class HomePageController implements Initializable {
         }
     }
 
+    private void populateTable() {
+        ObservableList<TranslatedText> list = FXCollections.observableArrayList();;
+        Nitrite db = ConnectionProvider.getConnection();
+//        NitriteCollection collection = db.getCollection("test");
+//
+//        Cursor cursor = collection.find();
+//
+//        for (Document document : cursor) {
+//            TranslatedText translatedText = new TranslatedText(document.get("from").toString(),document.get("to").toString());
+////            translatedText.setFromText(document.get("from").toString());
+////            translatedText.setFromText(document.get("to").toString());
+//            translatedTexts.add(translatedText);
+//  //
+//            list.add(translatedText);
+//            System.out.println(document.get("from").toString());
+//            System.out.println(document.get("to").toString());
+////            System.out.println(translatedText.getFromText());
+//        }
+
+        ObjectRepository<TranslatedText> repository = db.getRepository(TranslatedText.class);
+
+        Cursor<TranslatedText> cursor= repository.find(FindOptions.sort("_id", SortOrder.Descending));
+        for (TranslatedText translatedText : cursor) {
+               list.add(translatedText);
+            }
+
+
+        if (list!=null){
+            historyTable.setItems(list);
+        }
+
+//        Cursor<Employee> cursor = repository.find(ObjectFilters.gt("age", 30),
+//                sort("age", SortOrder.Ascending)
+//                        .thenLimit(0, 10));
+
+    }
 
     @FXML
     private void closeShutter(){
