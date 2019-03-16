@@ -14,7 +14,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.dizitart.no2.*;
+import org.dizitart.no2.FindOptions;
+import org.dizitart.no2.Nitrite;
+import org.dizitart.no2.SortOrder;
 import org.dizitart.no2.objects.Cursor;
 import org.dizitart.no2.objects.ObjectRepository;
 import sample.CaptureWindow;
@@ -23,8 +25,6 @@ import translate.Translator;
 import utility.PropertiesFile;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -80,8 +80,7 @@ public class HomePageController implements Initializable {
 
     @FXML
     public void closeWindow(){
-        Stage stage = Main.pStage;
-        stage.close();
+        System.exit(0);
     }
 
     @Override
