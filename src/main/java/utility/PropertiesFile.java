@@ -27,7 +27,8 @@ public class PropertiesFile {
                 prop.setProperty("toLanguage", "Japanese");
                 prop.store(output, null);
             } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
+                System.out.println("File not found. Creating one...");
             } catch (IOException exx) {
                 exx.printStackTrace();
             }

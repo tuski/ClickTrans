@@ -32,9 +32,9 @@
             </ImageView>
             <ChoiceBox fx:id="fromLanguage" layoutX="237.0" layoutY="25.0" prefHeight="26.0" prefWidth="113.0" />
             <ChoiceBox fx:id="toLanguage" layoutX="390.0" layoutY="25.0" prefHeight="26.0" prefWidth="113.0" />
-            <ImageView id="btnHistory" fx:id="btnSettings" fitHeight="35.0" fitWidth="42.0" layoutX="187.0" layoutY="18.0" onMouseClicked="#handleButtonAction" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnSettings" fitHeight="35.0" fitWidth="42.0" layoutX="187.0" layoutY="18.0" onMouseClicked="#handleButtonAction" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/settings.png" />
+                  <Image url="@../images/information.png" />
                </image>
             </ImageView>
             <ImageView id="btnHistory" fitHeight="35.0" fitWidth="42.0" layoutX="516.0" layoutY="18.0" onMouseClicked="#closeWindow" pickOnBounds="true" preserveRatio="true">
@@ -48,46 +48,6 @@
             <ImageView id="btnHistory" fx:id="btnExchange" fitHeight="35.0" fitWidth="42.0" layoutX="352.0" layoutY="18.0" onMouseClicked="#exchangeLanguage" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/bidirection.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="settingsView" layoutY="85.0" prefHeight="455.0" prefWidth="562.0" style="-fx-background-color: #3d4956;" />
-      <AnchorPane fx:id="clickView" layoutY="85.0" prefHeight="455.0" prefWidth="562.0" style="-fx-background-color: #3d4956;">
-         <children>
-            <TextArea fx:id="sourceText" editable="false" layoutX="5.0" layoutY="75.0" prefHeight="252.0" prefWidth="274.0" wrapText="true">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </TextArea>
-            <TextArea fx:id="translatedText" editable="false" layoutX="283.0" layoutY="76.0" prefHeight="252.0" prefWidth="274.0" wrapText="true">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </TextArea>
-            <Text fill="#e6e3e3" layoutX="28.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Source Text">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Text>
-            <Text fill="#e6e3e3" layoutX="314.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Translated Text">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Text>
-            <ImageView fx:id="btnCopySourceText" fitHeight="35.0" fitWidth="27.0" layoutX="211.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/copy.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="btnCopyTranslatedText" fitHeight="35.0" fitWidth="27.0" layoutX="501.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/copy.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="btnCloseShutter" accessibleText="Close Shutter" fitHeight="35.0" fitWidth="35.0" layoutX="523.0" layoutY="420.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/up.png" />
                </image>
             </ImageView>
          </children>
@@ -106,9 +66,62 @@
                </font>
             </Label>
          </children></AnchorPane>
+      <AnchorPane fx:id="settingsView" layoutY="85.0" prefHeight="455.0" prefWidth="562.0" style="-fx-background-color: #3d4956;">
+         <children>
+            <Text fill="#e6e3e3" layoutX="79.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capture And Translate">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fill="#e6e3e3" layoutX="266.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select the area you want to translate and then press C button. It will translate the selected area text. By pressing the copy button you can copy the translated text." textAlignment="JUSTIFY" wrappingWidth="263.22668533954356">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <ImageView id="click" fitHeight="42.0" fitWidth="42.0" layoutX="21.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/click.png" />
+               </image>
+            </ImageView>
+            <Text fill="#e6e3e3" layoutX="84.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Translate">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fill="#e6e3e3" layoutX="266.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Input the word or sentence you want to translate. It will give you the translated text. By pressing the copy button you can copy the translated text." textAlignment="JUSTIFY" wrappingWidth="263.2266845703125">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <ImageView id="click" fitHeight="42.0" fitWidth="42.0" layoutX="24.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/language.png" />
+               </image>
+            </ImageView>
+            <Text fill="#e6e3e3" layoutX="89.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="History">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fill="#e6e3e3" layoutX="266.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You can check your previous translated input by clicking history button." textAlignment="JUSTIFY" wrappingWidth="263.2266845703125">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <ImageView id="click" fitHeight="42.0" fitWidth="42.0" layoutX="24.0" layoutY="240.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/history.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnCloseShutter12" accessibleText="Close Shutter" fitHeight="35.0" fitWidth="35.0" layoutX="520.0" layoutY="422.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/up.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
       <AnchorPane fx:id="translateView" layoutY="85.0" prefHeight="461.0" prefWidth="562.0" style="-fx-background-color: #3d4956;">
          <children>
-            <Button layoutX="224.0" layoutY="350.0" mnemonicParsing="false" onAction="#translate" prefHeight="42.0" prefWidth="114.0" style="-fx-background-radius: 23; -fx-background-color: #75DA8B;" text="Translate">
+            <Button id="btn_Translate" fx:id="btn_Translate" layoutX="224.0" layoutY="350.0" mnemonicParsing="false" onAction="#translate" prefHeight="42.0" prefWidth="114.0" text="Translate">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -133,21 +146,60 @@
                   <Font size="22.0" />
                </font>
             </Text>
-            <ImageView fx:id="btnCopySourceText2" fitHeight="35.0" fitWidth="27.0" layoutX="214.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnCopySourceText2" fitHeight="35.0" fitWidth="27.0" layoutX="214.0" layoutY="33.0" onMouseClicked="#transSrcTxtCopy" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/copy.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="btnCopyTranslatedText1" fitHeight="35.0" fitWidth="27.0" layoutX="504.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnCopyTranslatedText1" fitHeight="35.0" fitWidth="27.0" layoutX="504.0" layoutY="34.0" onMouseClicked="#transTransTxtCopy" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/copy.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="btnCloseShutter1" accessibleText="Close Shutter" fitHeight="35.0" fitWidth="35.0" layoutX="521.0" layoutY="417.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnCloseShutter1" accessibleText="Close Shutter" fitHeight="35.0" fitWidth="35.0" layoutX="523.0" layoutY="426.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/up.png" />
                </image>
             </ImageView>
          </children></AnchorPane>
+      <AnchorPane fx:id="clickView" layoutY="85.0" prefHeight="455.0" prefWidth="562.0" style="-fx-background-color: #3d4956;">
+         <children>
+            <TextArea fx:id="sourceText" editable="false" layoutX="5.0" layoutY="75.0" prefHeight="252.0" prefWidth="274.0" wrapText="true">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </TextArea>
+            <TextArea fx:id="translatedText" editable="false" layoutX="283.0" layoutY="76.0" prefHeight="252.0" prefWidth="274.0" wrapText="true">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </TextArea>
+            <Text fill="#e6e3e3" layoutX="28.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Source Text">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <Text fill="#e6e3e3" layoutX="314.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Translated Text">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="btnCopySourceText" fitHeight="35.0" fitWidth="27.0" layoutX="211.0" layoutY="40.0" onMouseClicked="#clickSrcTxtCopy" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/copy.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnCopyTranslatedText" fitHeight="35.0" fitWidth="27.0" layoutX="501.0" layoutY="41.0" onMouseClicked="#clickTransTxtCopy" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/copy.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="btnCloseShutter" accessibleText="Close Shutter" fitHeight="35.0" fitWidth="35.0" layoutX="523.0" layoutY="420.0" onMouseClicked="#closeShutter" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/up.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

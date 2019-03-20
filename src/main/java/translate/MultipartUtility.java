@@ -112,7 +112,7 @@ public MultipartUtility(String requestURL, String charset)
     //Log.v("MultiPart",""+httpConn.getResponseMessage());
     if (status == HttpURLConnection.HTTP_OK) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(
-                httpConn.getInputStream()));
+                httpConn.getInputStream(),"UTF-8"));
         String line = null;
         while ((line = reader.readLine()) != null) {
           //  Log.v("MultiPart",""+line);

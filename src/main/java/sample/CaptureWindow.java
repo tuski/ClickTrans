@@ -154,7 +154,7 @@ public class CaptureWindow extends Stage {
         setScene(new Scene(borderPane, Color.TRANSPARENT));
         getScene().setCursor(Cursor.CROSSHAIR);
         getScene().setOnKeyReleased(key -> {
-            if (key.getCode() == KeyCode.B) {
+            if (key.getCode() == KeyCode.C) {
                 close();
                 System.out.println("Key Released....");
                 ////////////

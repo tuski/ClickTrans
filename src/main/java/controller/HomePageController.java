@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
@@ -22,18 +23,20 @@ import org.dizitart.no2.objects.ObjectRepository;
 import sample.CaptureWindow;
 import sample.Main;
 import translate.Translator;
+import utility.ClickTransUtil;
 import utility.PropertiesFile;
+import utility.Toast;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class HomePageController implements Initializable {
     @FXML
-    private AnchorPane rootStage;
-
-    @FXML
-    private AnchorPane topbar;
+    private AnchorPane rootStage, topbar;
 
     @FXML
     private ImageView btnClick,btnTranslate, btnHistory, btnSettings, btnCloseShutter;
@@ -227,5 +230,42 @@ public class HomePageController implements Initializable {
         fromLanguage.setValue(languageTo);
         toLanguage.setValue(languageFrom);
     }
+
+    @FXML
+    private void clickSrcTxtCopy(){
+        String txt= sourceText.getText();
+        if (!txt.isEmpty()){
+            ClickTransUtil.copyToClipboard(txt);
+            Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);
+        }
+
+    }
+
+    @FXML
+    private void clickTransTxtCopy(){
+        String txt= translatedText.getText();
+        if (!txt.isEmpty()) {
+            ClickTransUtil.copyToClipboard(translatedText.getText());
+            Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);
+        }
+    }
+
+    @FXML
+    private void transSrcTxtCopy(){
+        String txt= sourceTextTransView.getText();
+        if (!txt.isEmpty()) {
+        ClickTransUtil.copyToClipboard(sourceTextTransView.getText());
+        Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);}
+    }
+
+    @FXML
+    private void transTransTxtCopy(){
+        String txt= translatedTextTransView.getText();
+        if (!txt.isEmpty()) {
+        ClickTransUtil.copyToClipboard(translatedTextTransView.getText());
+        Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);}
+    }
+
+
 
 }

@@ -2,6 +2,7 @@ package translate;
 
 import database.ConnectionProvider;
 import entity.TranslatedText;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.dizitart.no2.*;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.json.JSONArray;
@@ -51,6 +52,8 @@ public class Translator {
                 responseString.append(line);
             }
 
+            //String ocrTxt =  URLEncoder.encode(childJSONObject.getString("ParsedText"), "UTF-8");
+            System.out.println(childJSONObject.getString("ParsedText"));
             return childJSONObject.getString("ParsedText");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -73,8 +76,7 @@ public class Translator {
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         String inputLine;
         StringBuffer response = new StringBuffer();
 
@@ -92,7 +94,7 @@ public class Translator {
 //            NitriteCollection collection = db.getCollection("test");
 //            Document doc = Document.createDocument("from",word).put("to",result);
 //            collection.insert(doc);
-            System.out.println("entered");
+            System.out.println("entered="+word+" result= "+result);
 
             ObjectRepository<TranslatedText> repository = db.getRepository(TranslatedText.class);
             repository.insert(new TranslatedText(word,result));

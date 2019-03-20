@@ -16,6 +16,7 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -27,20 +28,21 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>
-                                        sample.Main
-                                    </mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
+
                     </execution>
                 </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>
+                                sample.Main
+                            </mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
             </plugin>
 
         </plugins>
