@@ -68,7 +68,7 @@ public class HomePageController implements Initializable {
     public void captureImage(AnchorPane clickView) {
         String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
         String languageTo = toLanguage.getSelectionModel().getSelectedItem().toString();
-        //https://stackoverflow.com/questions/41287372/how-to-take-snapshot-of-selected-area-of-screen-in-javafx
+
         Stage stage = Main.pStage;
         CaptureWindow window = new CaptureWindow(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), stage, sourceText, translatedText, languageFrom, languageTo, clickView);
         window.show();
