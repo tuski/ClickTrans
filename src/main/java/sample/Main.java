@@ -18,7 +18,7 @@ public class Main extends Application {
     public static Stage pStage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/homePage.fxml"));
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         root.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -38,7 +38,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
-        pStage=primaryStage;
+        pStage = primaryStage;
         primaryStage.setScene(scene);
         primaryStage.show();
 

@@ -1,8 +1,7 @@
 package translate;
 
-import database.ConnectionProvider;
+import database.DBConnectionProvider;
 import entity.TranslatedText;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.dizitart.no2.*;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.json.JSONArray;
@@ -91,7 +90,7 @@ public class Translator {
             if (result.equals(" ") || result.isEmpty()) {
                 result = "Could not translate. Try changing the language";
             } else {
-                Nitrite db = ConnectionProvider.getConnection();
+                Nitrite db = DBConnectionProvider.getConnection();
 //            NitriteCollection collection = db.getCollection("test");
 //            Document doc = Document.createDocument("from",word).put("to",result);
 //            collection.insert(doc);

@@ -108,6 +108,7 @@ public class CaptureWindow extends Stage {
 
     /**
      * Constructor.
+     *
      * @param screenWidth    the screen width
      * @param screenHeight   the screen height
      * @param primary        the primary
@@ -121,9 +122,9 @@ public class CaptureWindow extends Stage {
         stage = primary;
         this.sourceText = sourceText;
         this.translatedText = translatedText;
-        this.languageFrom=languageFrom;
-        this.languageTo=languageTo;
-        this.clickView=clickView;
+        this.languageFrom = languageFrom;
+        this.languageTo = languageTo;
+        this.clickView = clickView;
 
         setX(0);
         setY(0);
@@ -167,7 +168,7 @@ public class CaptureWindow extends Stage {
                     File imageFile = new File("out.jpg");
                     ImageIO.write(screenCapture, "jpg", imageFile);
                     Translator translator = new Translator();
-                    String ocrText = translator.sendPost(false, imageFile,languageFrom); //3 digit language
+                    String ocrText = translator.sendPost(false, imageFile, languageFrom); //3 digit language
                     String transText = translator.callUrlAndParseResult(languageFrom, languageTo, ocrText); //2 digit language
                     sourceText.setText(ocrText);
                     translatedText.setText(transText);

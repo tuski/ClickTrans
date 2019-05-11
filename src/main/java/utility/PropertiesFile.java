@@ -13,11 +13,11 @@ public class PropertiesFile {
 
         try {
             input = new FileInputStream("config.properties");
-            if(input!=null){
+            if (input != null) {
                 prop.load(input);
                 System.out.println(prop.getProperty("fromLanguage"));
                 System.out.println(prop.getProperty("toLanguage"));
-            }else {
+            } else {
 
             }
         } catch (FileNotFoundException e) {
@@ -40,7 +40,7 @@ public class PropertiesFile {
 
     }
 
-    public void setProperty(String propName, String value){
+    public void setProperty(String propName, String value) {
         try {
             output = new FileOutputStream("config.properties");
             prop.setProperty(propName, value);
@@ -51,11 +51,11 @@ public class PropertiesFile {
 
     }
 
-    public String getProperty(String propName){
+    public String getProperty(String propName) {
         try {
             //input = new FileInputStream("config.properties");
             prop.load(input);
-           return prop.getProperty(propName);
+            return prop.getProperty(propName);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
