@@ -1,15 +1,15 @@
-package viewcode;
+package controller;
 
 import database.ConnectionProvider;
 import org.dizitart.no2.*;
 
 import javax.swing.text.TabableView;
 
-public class HistoryView {
+public class HistoryController {
 
     TabableView tabableView;
 
-    public HistoryView(TabableView tabableView) {
+    public HistoryController(TabableView tabableView) {
         this.tabableView = tabableView;
     }
 

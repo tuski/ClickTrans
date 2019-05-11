@@ -164,14 +164,14 @@ public class CaptureWindow extends Stage {
                 try {
                     BufferedImage screenCapture = new Robot().createScreenCapture(screen);
 
-                    File imageFile = new File("c:\\Users\\0568\\Pictures\\out.jpg");
+                    File imageFile = new File("out.jpg");
                     ImageIO.write(screenCapture, "jpg", imageFile);
                     Translator translator = new Translator();
                     String ocrText = translator.sendPost(false, imageFile,languageFrom); //3 digit language
                     String transText = translator.callUrlAndParseResult(languageFrom, languageTo, ocrText); //2 digit language
                     sourceText.setText(ocrText);
                     translatedText.setText(transText);
-
+                    imageFile.delete();
                     //sendPost(false, imageFile, "jpn");
 
                 } catch (AWTException e) {

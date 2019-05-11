@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-public class ClickTransUtil {
+public class Util {
 
     public static void copyToClipboard(String text){
         StringSelection stringSelection = new StringSelection(text);

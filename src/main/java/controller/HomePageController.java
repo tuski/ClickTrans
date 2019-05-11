@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
@@ -23,13 +22,10 @@ import org.dizitart.no2.objects.ObjectRepository;
 import sample.CaptureWindow;
 import sample.Main;
 import translate.Translator;
-import utility.ClickTransUtil;
+import utility.Util;
 import utility.PropertiesFile;
 import utility.Toast;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -89,7 +85,6 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         PropertiesFile prop= new PropertiesFile();
-
 
         //Load initial language
         ObservableList<String> sourceLangOptn = FXCollections.observableArrayList("Japanese","English");
@@ -235,7 +230,7 @@ public class HomePageController implements Initializable {
     private void clickSrcTxtCopy(){
         String txt= sourceText.getText();
         if (!txt.isEmpty()){
-            ClickTransUtil.copyToClipboard(txt);
+            Util.copyToClipboard(txt);
             Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);
         }
 
@@ -245,7 +240,7 @@ public class HomePageController implements Initializable {
     private void clickTransTxtCopy(){
         String txt= translatedText.getText();
         if (!txt.isEmpty()) {
-            ClickTransUtil.copyToClipboard(translatedText.getText());
+            Util.copyToClipboard(translatedText.getText());
             Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);
         }
     }
@@ -254,7 +249,7 @@ public class HomePageController implements Initializable {
     private void transSrcTxtCopy(){
         String txt= sourceTextTransView.getText();
         if (!txt.isEmpty()) {
-        ClickTransUtil.copyToClipboard(sourceTextTransView.getText());
+        Util.copyToClipboard(sourceTextTransView.getText());
         Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);}
     }
 
@@ -262,7 +257,7 @@ public class HomePageController implements Initializable {
     private void transTransTxtCopy(){
         String txt= translatedTextTransView.getText();
         if (!txt.isEmpty()) {
-        ClickTransUtil.copyToClipboard(translatedTextTransView.getText());
+        Util.copyToClipboard(translatedTextTransView.getText());
         Toast.makeText(Main.pStage,"Text Copied", 1000,500,500);}
     }
 
