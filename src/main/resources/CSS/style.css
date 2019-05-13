@@ -1,0 +1,88 @@
+
+/*.table-view{*/
+    /*-fx-background-color:  #3d4956;*/
+/*}*/
+
+  /*.table-view:focused{*/
+      /*-fx-background-color: #3d4956;*/
+  /*}*/
+.image-view:hover {
+    -fx-background-color: orange;
+    -fx-opacity: 0.3;
+    -fx-border-color: orange;
+}
+
+#btn_Translate{
+    -fx-background-radius : 23;
+    -fx-background-color:  #75DA8B;
+}
+
+#btn_Translate:hover{
+    -fx-background-color: orange;
+
+
+}
+
+  .table-view .column-header {
+      -fx-background-color: transparent;
+  }
+
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(#131313 0.0%, #424141 100.0%);
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-font-weight:bold;
+    -fx-text-fill: white;
+}
+
+  .table-view .table-column{
+      -fx-alignment:center;
+  }
+
+  .table-view .table-cell{
+      /*-fx-font-weight:bold;*/
+      -fx-font-size:19px;
+      /* -fx-text-fill:orange; */
+
+  }
+
+
+/* .table-row-cell{
+    -fx-background-color: white;
+    -fx-background-insets: 0.0, 0.0 0.0 1.0 0.0;
+    -fx-padding: 0.0em;
+}
+
+//Style for each <odd> row of table view
+.table-row-cell:odd{
+    -fx-background-color: orange;
+    -fx-background-insets: 0.0, 0.0 0.0 1.0 0.0;
+    -fx-padding: 0.0em;
+}
+*/
+
+  /*.table-row-cell:selected {*/
+      /*!* -fx-border-color:transparent firebrick transparent firebrick  ;*/
+       /*-fx-border-width:2.0; *!*/
+  /*}*/
+
+
+
+  .table-row-cell:hover {
+      -fx-background-color:orange;
+  }
+
+  /*.table-row-cell:focused {*/
+      /*-fx-background-color:blue;*/
+  /*}*/
+
+.table-view *.increment-button,
+.table-view *.decrement-button,
+.table-view *.increment-arrow,
+.table-view *.decrement-arrow
+{
+    -fx-padding: 0;
+    -fx-shape: "";
+}
