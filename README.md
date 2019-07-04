@@ -10,3 +10,6 @@ The application has built in JavaFX platform. You can try the application by run
 
 The app is very easy to use. Just run the app select the area you want to translate and <b>Press C</b>.
 That's it.
+
+<img src="https://github.com/tuski/ClickTrans/blob/master/img/bfrTrns.png" align="middle"> <br> <br>
+<img src="https://github.com/tuski/ClickTrans/blob/master/img/aftrTrans.png" align="middle">
