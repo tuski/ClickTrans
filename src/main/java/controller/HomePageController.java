@@ -28,6 +28,9 @@ import utility.Util;
 
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -81,10 +84,8 @@ public class HomePageController implements Initializable {
         }
 
         Stage stage = Main.pStage;
-        clickView.setCursor(javafx.scene.Cursor.WAIT);
         CaptureWindow window = new CaptureWindow(xNow, yNow, stage, sourceText, translatedText, languageFrom, languageTo, clickView);
         window.show();
-        clickView.setCursor(javafx.scene.Cursor.DEFAULT);
     }
 
     @FXML
@@ -95,12 +96,13 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         PropertiesFile prop = new PropertiesFile();
-
+        List<String> languageSupport = Arrays.asList("Arabic","Chinese","English", "French", "German", "Japanese",
+                                                        "korean","Russian","Spanish","Swedish", "Turkish");
         //Load initial language
-        ObservableList<String> sourceLangOptn = FXCollections.observableArrayList("Japanese", "English");
+        ObservableList<String> sourceLangOptn = FXCollections.observableArrayList(languageSupport);
         fromLanguage.setValue(prop.getProperty("fromLanguage"));
         fromLanguage.setItems(sourceLangOptn);
-        ObservableList<String> outputLangOptn = FXCollections.observableArrayList("Japanese", "English");
+        ObservableList<String> outputLangOptn = FXCollections.observableArrayList(languageSupport);
         toLanguage.setValue(prop.getProperty("toLanguage"));
         toLanguage.setItems(outputLangOptn);
 
