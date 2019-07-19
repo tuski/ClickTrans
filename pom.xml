@@ -19,6 +19,7 @@
 
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -42,8 +43,8 @@
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
+
 
             <plugin>
                 <groupId>com.zenjava</groupId>
@@ -59,8 +60,8 @@
     </build>
 
 
-
     <dependencies>
+
              
           <dependency>
            <groupId>org.apache.httpcomponents</groupId>
@@ -68,13 +69,12 @@
            <version>[4.3.6,)</version>
          </dependency>
 
-
-    <!-- https://mvnrepository.com/artifact/org.json/json -->
-    <dependency>
-        <groupId>org.json</groupId>
-        <artifactId>json</artifactId>
-        <version>20180130</version>
-    </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
 
         <dependency>
             <groupId>org.dizitart</groupId>
@@ -100,8 +100,8 @@
             <version>3.8.0</version>
         </dependency>
 
-</dependencies>
+    </dependencies>
 
 
-    
 </project>
+
