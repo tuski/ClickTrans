@@ -6,13 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.dizitart.no2.FindOptions;
 import org.dizitart.no2.Nitrite;
@@ -22,10 +22,11 @@ import org.dizitart.no2.objects.ObjectRepository;
 import sample.CaptureWindow;
 import sample.Main;
 import translate.Translator;
-import utility.Util;
 import utility.PropertiesFile;
 import utility.Toast;
+import utility.Util;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -69,9 +70,21 @@ public class HomePageController implements Initializable {
         String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
         String languageTo = toLanguage.getSelectionModel().getSelectedItem().toString();
 
+        int xNow = 0, yNow = 0;
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+        for (GraphicsDevice curGs : gs) {
+            DisplayMode mode = curGs.getDisplayMode();
+            xNow += mode.getWidth();
+            yNow = mode.getHeight();
+        }
+
         Stage stage = Main.pStage;
-        CaptureWindow window = new CaptureWindow(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), stage, sourceText, translatedText, languageFrom, languageTo, clickView);
+        clickView.setCursor(javafx.scene.Cursor.WAIT);
+        CaptureWindow window = new CaptureWindow(xNow, yNow, stage, sourceText, translatedText, languageFrom, languageTo, clickView);
         window.show();
+        clickView.setCursor(javafx.scene.Cursor.DEFAULT);
     }
 
     @FXML
