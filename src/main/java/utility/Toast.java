@@ -14,11 +14,9 @@ import javafx.util.Duration;
 
 import java.awt.*;
 
-public final class Toast
-{
-    public static void makeText(Stage ownerStage, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay)
-    {
-        Stage toastStage=new Stage();
+public final class Toast {
+    public static void makeText(Stage ownerStage, String toastMsg, int toastDelay, int fadeInDelay, int fadeOutDelay) {
+        Stage toastStage = new Stage();
         toastStage.initOwner(ownerStage);
         toastStage.setResizable(false);
         toastStage.initStyle(StageStyle.TRANSPARENT);
@@ -39,27 +37,24 @@ public final class Toast
         toastStage.show();
 
         Timeline fadeInTimeline = new Timeline();
-        KeyFrame fadeInKey1 = new KeyFrame(Duration.millis(fadeInDelay), new KeyValue (toastStage.getScene().getRoot().opacityProperty(), 1)); 
-        fadeInTimeline.getKeyFrames().add(fadeInKey1);   
-        fadeInTimeline.setOnFinished((ae) -> 
+        KeyFrame fadeInKey1 = new KeyFrame(Duration.millis(fadeInDelay), new KeyValue(toastStage.getScene().getRoot().opacityProperty(), 1));
+        fadeInTimeline.getKeyFrames().add(fadeInKey1);
+        fadeInTimeline.setOnFinished((ae) ->
         {
             new Thread(() -> {
-                try
-                {
+                try {
                     Thread.sleep(toastDelay);
-                }
-                catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                   Timeline fadeOutTimeline = new Timeline();
-                    KeyFrame fadeOutKey1 = new KeyFrame(Duration.millis(fadeOutDelay), new KeyValue (toastStage.getScene().getRoot().opacityProperty(), 0)); 
-                    fadeOutTimeline.getKeyFrames().add(fadeOutKey1);   
-                    fadeOutTimeline.setOnFinished((aeb) -> toastStage.close()); 
-                    fadeOutTimeline.play();
+                Timeline fadeOutTimeline = new Timeline();
+                KeyFrame fadeOutKey1 = new KeyFrame(Duration.millis(fadeOutDelay), new KeyValue(toastStage.getScene().getRoot().opacityProperty(), 0));
+                fadeOutTimeline.getKeyFrames().add(fadeOutKey1);
+                fadeOutTimeline.setOnFinished((aeb) -> toastStage.close());
+                fadeOutTimeline.play();
             }).start();
-        }); 
+        });
         fadeInTimeline.play();
     }
 }

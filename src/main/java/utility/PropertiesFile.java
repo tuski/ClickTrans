@@ -12,7 +12,7 @@ public class PropertiesFile {
     public PropertiesFile() {
 
         try {
-            input = new FileInputStream("config.properties");
+            input = new FileInputStream(ConstantUtil.CONFIG_FILE_NAME);
             if (input != null) {
                 prop.load(input);
                 System.out.println(prop.getProperty("fromLanguage"));
@@ -22,6 +22,7 @@ public class PropertiesFile {
             }
         } catch (FileNotFoundException e) {
             try {
+                System.out.println("File Not Found. Creating New File...");
                 output = new FileOutputStream("config.properties");
                 prop.setProperty("fromLanguage", "English");
                 prop.setProperty("toLanguage", "Japanese");
@@ -29,13 +30,12 @@ public class PropertiesFile {
                 input = new FileInputStream("config.properties");
                 prop.load(input);
             } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
+                System.out.println("File Not Found. Creating New File...");
             } catch (IOException e1) {
-                e1.printStackTrace();
+                System.out.println("File Not Found. Creating New File...");
             }
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File Not Found. Creating New File...");
         }
 
     }
@@ -53,7 +53,6 @@ public class PropertiesFile {
 
     public String getProperty(String propName) {
         try {
-            //input = new FileInputStream("config.properties");
             prop.load(input);
             return prop.getProperty(propName);
         } catch (IOException e) {
