@@ -9,29 +9,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import translate.MultipartUtility;
 import translate.Translator;
+import utility.ConstantUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.List;
 
 /**
  * Is used to capture an area of the screen.
@@ -158,37 +146,28 @@ public class CaptureWindow extends Stage {
             if (key.getCode() == KeyCode.C) {
                 close();
                 System.out.println("Key Released....");
-                ////////////
+
                 clickView.setVisible(true);
                 int[] ints = calculatedRectangle();
                 Rectangle screen = new Rectangle(ints[0], ints[1], ints[2], ints[3]);
                 try {
                     BufferedImage screenCapture = new Robot().createScreenCapture(screen);
 
-                    File imageFile = new File("out.jpg");
-                    ImageIO.write(screenCapture, "jpg", imageFile);
+                    File imageFile = new File(ConstantUtil.OUTPUT_FILE_NAME);
+                    ImageIO.write(screenCapture, ConstantUtil.OUTPUT_FILE_FORMAT, imageFile);
                     Translator translator = new Translator();
                     String ocrText = translator.sendPost(false, imageFile, languageFrom); //3 digit language
                     String transText = translator.callUrlAndParseResult(languageFrom, languageTo, ocrText); //2 digit language
                     sourceText.setText(ocrText);
                     translatedText.setText(transText);
                     imageFile.delete();
-                    //sendPost(false, imageFile, "jpn");
-
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             } else if (key.getCode() == KeyCode.ESCAPE)
                 close();
         });
 
-        // gc
         gc.setLineDashes(6);
         gc.setFont(Font.font("null", FontWeight.BOLD, 14));
     }

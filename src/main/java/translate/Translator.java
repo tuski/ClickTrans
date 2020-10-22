@@ -2,14 +2,19 @@ package translate;
 
 import database.DBConnectionProvider;
 import entity.TranslatedText;
-import org.dizitart.no2.*;
+import javafx.scene.control.Alert;
+import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import utility.ConstantUtil;
+import utility.Toast;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -20,6 +25,11 @@ public class Translator {
     HashMap<String, String> twoDigitLang = new HashMap<String, String>();
 
     public Translator() {
+        initComboBox();
+
+    }
+
+    private void initComboBox() {
         threeDigitLang.put("Japanese", "jpn");
         threeDigitLang.put("English", "eng");
         threeDigitLang.put("Arabic", "ara");
@@ -43,39 +53,33 @@ public class Translator {
         twoDigitLang.put("Spanish", "es");
         twoDigitLang.put("Swedish", "sv");
         twoDigitLang.put("Turkish", "tr");
-
     }
 
 
     public String sendPost(boolean isOverlayRequired, File imageUrl, String language) throws Exception {
-        String url = "https://api.ocr.space/parse/image"; // OCR API Endpoints
-        StringBuffer responseString = new StringBuffer();
+        String url = ConstantUtil.OCR_API; // OCR API Endpoints
         try {
-            MultipartUtility multipart = new MultipartUtility(url, "UTF-8");
-
-            multipart.addFormField("isOverlayRequired", Boolean.toString(isOverlayRequired));
-            multipart.addFormField("isCreateSearchablePdf", "false");
-            multipart.addFormField("language", threeDigitLang.get(language));
-            multipart.addFilePart("file", imageUrl);
-            List<String> response = multipart.finish();
+            List<String> response = getResponse(isOverlayRequired, imageUrl, language, url);
 
             JSONObject obj = new JSONObject(response.get(0));
             JSONArray jsonArray = obj.getJSONArray("ParsedResults");
             JSONObject childJSONObject = jsonArray.getJSONObject(0);
 
-            for (String line : response) {
-                responseString.append(line);
-            }
-
-            //String ocrTxt =  URLEncoder.encode(childJSONObject.getString("ParsedText"), "UTF-8");
-            System.out.println(childJSONObject.getString("ParsedText"));
             return childJSONObject.getString("ParsedText");
         } catch (IOException ex) {
             ex.printStackTrace();
             return "Could not translate";
         }
+    }
 
-        // return String.valueOf(responseString);
+    private List<String> getResponse(boolean isOverlayRequired, File imageUrl, String language, String url) throws IOException {
+        MultipartUtility multipart = new MultipartUtility(url, "UTF-8");
+        multipart.addFormField("isOverlayRequired", Boolean.toString(isOverlayRequired));
+        multipart.addFormField("isCreateSearchablePdf", "false");
+        multipart.addFormField("language", threeDigitLang.get(language));
+        multipart.addFilePart("file", imageUrl);
+        List<String> response = multipart.finish();
+        return response;
     }
 
 
@@ -93,14 +97,14 @@ public class Translator {
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
 
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = inputBuffer.readLine()) != null) {
                 response.append(inputLine);
             }
-            in.close();
+            inputBuffer.close();
 
             result = parseResult(response.toString());
             result.trim();
@@ -109,46 +113,36 @@ public class Translator {
                 result = "Could not translate. Try changing the language";
             } else {
                 Nitrite db = DBConnectionProvider.getConnection();
-//            NitriteCollection collection = db.getCollection("test");
-//            Document doc = Document.createDocument("from",word).put("to",result);
-//            collection.insert(doc);
-                System.out.println("entered=" + word + " result= " + result);
-
                 ObjectRepository<TranslatedText> repository = db.getRepository(TranslatedText.class);
                 repository.insert(new TranslatedText(word, result));
-
-//            Cursor cursor = collection.find(FindOptions.sort("id",SortOrder.Descending));
-//            for (Document document : cursor) {
-//                System.out.println(document.get("from"));
-//                System.out.println(document.get("to"));
-//            }
-
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return result;
     }
 
-    private static String parseResult(String inputJson) throws Exception {
-        JSONArray jsonArray = new JSONArray(inputJson);
-        JSONArray jsonArray2 = (JSONArray) jsonArray.get(0);
+    private static String parseResult(String inputJson) {
+        try {
+            JSONArray jsonObject = new JSONArray(inputJson);
+            JSONArray translatedArray = (JSONArray) jsonObject.get(0);
 
-        String result = "";
-        for (int i = 0; i < jsonArray2.length(); i++) {
-            JSONArray jsonArray3 = (JSONArray) jsonArray2.get(i);
-            result = result + " " + jsonArray3.get(0).toString();
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < translatedArray.length(); i++) {
+                JSONArray translatedTextArray = (JSONArray) translatedArray.get(i);
+                result.append(" ").append(translatedTextArray.get(0).toString());
+            }
+
+            return result.toString();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Could not translate.");
+            alert.setContentText("Is your language selection correct? Also, try zooming the text.");
+            alert.showAndWait();
+            System.out.println(e.getMessage());
         }
-
-        return result;
+        return null;
     }
 
 
