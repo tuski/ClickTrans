@@ -8,18 +8,12 @@ public class PropertiesFile {
     InputStream input = null;
     OutputStream output = null;
 
-
     public PropertiesFile() {
-
         try {
             input = new FileInputStream(ConstantUtil.CONFIG_FILE_NAME);
-            if (input != null) {
-                prop.load(input);
-                System.out.println(prop.getProperty("fromLanguage"));
-                System.out.println(prop.getProperty("toLanguage"));
-            } else {
-
-            }
+            prop.load(input);
+            System.out.println(prop.getProperty("fromLanguage"));
+            System.out.println(prop.getProperty("toLanguage"));
         } catch (FileNotFoundException e) {
             try {
                 System.out.println("File Not Found. Creating New File...");
@@ -29,8 +23,6 @@ public class PropertiesFile {
                 prop.store(output, null);
                 input = new FileInputStream("config.properties");
                 prop.load(input);
-            } catch (FileNotFoundException e1) {
-                System.out.println("File Not Found. Creating New File...");
             } catch (IOException e1) {
                 System.out.println("File Not Found. Creating New File...");
             }

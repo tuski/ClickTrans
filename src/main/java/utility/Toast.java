@@ -45,7 +45,6 @@ public final class Toast {
                 try {
                     Thread.sleep(toastDelay);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 Timeline fadeOutTimeline = new Timeline();

@@ -33,7 +33,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        sample.Main
+                                        main.Main
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -52,7 +52,7 @@
                 <version>8.8.3</version>
                 <configuration>
                     <vendor>Byte Code</vendor>
-                    <mainClass>sample.Main</mainClass>
+                    <mainClass>main.Main</mainClass>
                 </configuration>
             </plugin>
 

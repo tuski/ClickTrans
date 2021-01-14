@@ -1,5 +1,6 @@
 package controller;
 
+import API.GoogleTranslatorAPI;
 import database.DBConnectionProvider;
 import entity.TranslatedText;
 import javafx.collections.FXCollections;
@@ -19,16 +20,14 @@ import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.SortOrder;
 import org.dizitart.no2.objects.Cursor;
 import org.dizitart.no2.objects.ObjectRepository;
-import sample.CaptureWindow;
-import sample.Main;
-import translate.Translator;
+import main.CaptureWindow;
+import main.Main;
 import utility.PropertiesFile;
 import utility.Toast;
 import utility.Util;
 
 import java.awt.*;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -63,10 +62,10 @@ public class HomePageController implements Initializable {
     private TableView<TranslatedText> historyTable;
 
     @FXML
-    private TableColumn<TranslatedText, String> fromText = new TableColumn<>("Source Text");
+    private final TableColumn<TranslatedText, String> fromText = new TableColumn<>("Source Text");
 
     @FXML
-    private TableColumn<TranslatedText, String> toText = new TableColumn<>("Translated Text");
+    private final TableColumn<TranslatedText, String> toText = new TableColumn<>("Translated Text");
 
 
     public void captureImage(AnchorPane clickView) {
@@ -128,10 +127,9 @@ public class HomePageController implements Initializable {
         fromText.textProperty();
         toText.prefWidthProperty().bind(historyTable.widthProperty().divide(2));
         historyTable.getColumns().addAll(fromText, toText);
-        //fromText.setSortType(TableColumn.SortType.DESCENDING);
 
-        Tooltip t = new Tooltip("Close Shutter");
-        Tooltip.install(btnCloseShutter, t);
+        Tooltip tip = new Tooltip("Close Shutter");
+        Tooltip.install(btnCloseShutter, tip);
         closeShutter();
     }
 
@@ -165,18 +163,16 @@ public class HomePageController implements Initializable {
             historyView.setVisible(false);
             settingsView.setVisible(true);
         }
-
-
     }
 
 
     @FXML
     private void translate() {
-        Translator translator = new Translator();
         String languageFrom = fromLanguage.getSelectionModel().getSelectedItem().toString();
         String languageTo = toLanguage.getSelectionModel().getSelectedItem().toString();
         try {
-            translatedTextTransView.setText(translator.callUrlAndParseResult(languageFrom, languageTo, sourceTextTransView.getText()));
+            GoogleTranslatorAPI googleTranslatorAPI = new GoogleTranslatorAPI();
+            translatedTextTransView.setText(googleTranslatorAPI.callUrlAndParseResult(languageFrom, languageTo, sourceTextTransView.getText()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,24 +180,7 @@ public class HomePageController implements Initializable {
 
     private void populateTable() {
         ObservableList<TranslatedText> list = FXCollections.observableArrayList();
-        ;
         Nitrite db = DBConnectionProvider.getConnection();
-//        NitriteCollection collection = db.getCollection("test");
-//
-//        Cursor cursor = collection.find();
-//
-//        for (Document document : cursor) {
-//            TranslatedText translatedText = new TranslatedText(document.get("from").toString(),document.get("to").toString());
-////            translatedText.setFromText(document.get("from").toString());
-////            translatedText.setFromText(document.get("to").toString());
-//            translatedTexts.add(translatedText);
-//  //
-//            list.add(translatedText);
-//            System.out.println(document.get("from").toString());
-//            System.out.println(document.get("to").toString());
-////            System.out.println(translatedText.getFromText());
-//        }
-
         ObjectRepository<TranslatedText> repository = db.getRepository(TranslatedText.class);
 
         Cursor<TranslatedText> cursor = repository.find(FindOptions.sort("_id", SortOrder.Descending));
@@ -209,15 +188,7 @@ public class HomePageController implements Initializable {
             list.add(translatedText);
         }
 
-
-        if (list != null) {
-            historyTable.setItems(list);
-        }
-
-//        Cursor<Employee> cursor = repository.find(ObjectFilters.gt("age", 30),
-//                sort("age", SortOrder.Ascending)
-//                        .thenLimit(0, 10));
-
+        historyTable.setItems(list);
     }
 
     @FXML

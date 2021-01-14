@@ -13,7 +13,6 @@ public class HistoryController {
         this.tabableView = tabableView;
     }
 
-
     private void populateTable() {
         Nitrite db = DBConnectionProvider.getConnection();
         NitriteCollection collection = db.getCollection("test");
@@ -23,9 +22,5 @@ public class HistoryController {
             System.out.println(document.get("from"));
             System.out.println(document.get("to"));
         }
-
-
     }
-
-
 }

@@ -1,4 +1,4 @@
-package translate;
+package utility;
 
 import java.io.*;
 import java.net.HttpURLConnection;
