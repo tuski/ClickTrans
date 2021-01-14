@@ -1,5 +1,7 @@
-package sample;
+package main;
 
+import API.GoogleTranslatorAPI;
+import API.OcrAPI;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -156,8 +158,10 @@ public class CaptureWindow extends Stage {
                     File imageFile = new File(ConstantUtil.OUTPUT_FILE_NAME);
                     ImageIO.write(screenCapture, ConstantUtil.OUTPUT_FILE_FORMAT, imageFile);
                     Translator translator = new Translator();
-                    String ocrText = translator.sendPost(false, imageFile, languageFrom); //3 digit language
-                    String transText = translator.callUrlAndParseResult(languageFrom, languageTo, ocrText); //2 digit language
+                    OcrAPI ocrAPI = new OcrAPI();
+                    String ocrText = ocrAPI.getOCRtext(false, imageFile, languageFrom); //3 digit language
+                    GoogleTranslatorAPI googleTranslatorAPI = new GoogleTranslatorAPI();
+                    String transText = googleTranslatorAPI.callUrlAndParseResult(languageFrom, languageTo, ocrText); //2 digit language
                     sourceText.setText(ocrText);
                     translatedText.setText(transText);
                     imageFile.delete();
